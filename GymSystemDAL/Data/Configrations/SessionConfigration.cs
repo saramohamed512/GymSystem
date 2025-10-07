@@ -24,6 +24,20 @@ namespace GymSystemDAL.Data.Configrations
 
             });
 
+            #region 1:M RS Between SessionCategory
+            builder.HasOne(X => X.SessionCategory)
+                  .WithMany(X => X.Sessions)
+                  .HasForeignKey(X => X.CategoryId);
+
+            #endregion
+
+            #region 1:M RS Between SessionTrainer
+            builder.HasOne(X => X.SessionTrainer)
+                  .WithMany(X => X.TrainerSessions)
+                  .HasForeignKey(X => X.TrainerId);
+
+            #endregion
+
         }
     }
 }

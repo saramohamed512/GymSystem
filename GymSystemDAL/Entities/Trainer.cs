@@ -12,5 +12,10 @@ namespace GymSystemDAL.Entities
         //CreatedAt Column Exists in BaseEntity
         //I will use it to store the Employment Start Date
         public Specialites Specialites { get; set; }
+
+        #region 1:M RS Between SessionTrainer
+
+        public ICollection<Session> TrainerSessions{ get; set; }//One
+        #endregion
     }
 }
