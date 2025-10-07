@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GymSystemDAL.Entities
 {
-    internal class Membership: BaseEntity
+    public class Membership: BaseEntity
     {
         public int MemberId { get; set; }// FK from Member
         public int PlanId { get; set; }// FK from Plan

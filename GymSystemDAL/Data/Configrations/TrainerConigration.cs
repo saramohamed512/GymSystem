@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace GymSystemDAL.Data.Configrations
 {
-    internal class TrainerConigration : GymUserConfigration<Trainer>, IEntityTypeConfiguration<Trainer>
+    public class TrainerConigration : GymUserConfigration<Trainer>, IEntityTypeConfiguration<Trainer>
     {
-        public new void Configure(EntityTypeBuilder<Member> builder)
+        public new void Configure(EntityTypeBuilder<Trainer> builder)
         {
             //Special Type HireDate
             builder.Property(X => X.CreatedAt)

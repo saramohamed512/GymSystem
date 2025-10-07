@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace GymSystemDAL.Data.Configrations
 {
-    internal class MembershipConfigration : IEntityTypeConfiguration<Membership>
+    public class MembershipConfigration : IEntityTypeConfiguration<Membership>
     {
 
         public void Configure(EntityTypeBuilder<Membership> builder)
         {
 
             builder.Property(X => X.CreatedAt)
-            .HasColumnType("StartDate")
+            .HasColumnName("StartDate")
             .HasDefaultValueSql("GETDATE()");
 
 

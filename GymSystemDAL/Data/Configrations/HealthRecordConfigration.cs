@@ -9,16 +9,19 @@ using System.Threading.Tasks;
 
 namespace GymSystemDAL.Data.Configrations
 {
-    internal class HealthRecordConfigration : IEntityTypeConfiguration<Entities.HealthRecord>
+    public class HealthRecordConfigration : IEntityTypeConfiguration<Entities.HealthRecord>
     {
 
         public void Configure(EntityTypeBuilder<HealthRecord> builder)
         {
 
-            builder.ToTable("Member");
+            builder.ToTable("Members");
             builder.HasOne<Member>()
                 .WithOne(X => X.HealthRecord)
                 .HasForeignKey<HealthRecord>(X => X.Id);
+
+            builder.Ignore(X => X.CreatedAt);
+            builder.Ignore(X => X.UpdatedAt);
         }
     }
 }
