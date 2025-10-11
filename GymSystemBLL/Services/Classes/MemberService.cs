@@ -15,17 +15,20 @@ namespace GymSystemBLL.Services.Classes
         private readonly IGenericRepository<Member> _memberRepository;
         private readonly IGenericRepository<Membership> _membershipRepository;
         private readonly IPlanRepository _planRepository;
+        private readonly IGenericRepository<HealthRecord> _healthRecordRepository;
 
         public MemberService
             (IGenericRepository<Member> memberRepository,
             IGenericRepository<Membership> membershipRepository,
-            IPlanRepository planRepository
+            IPlanRepository planRepository,
+            IGenericRepository<HealthRecord> healthRecordRepository
 
             )
         {
             _memberRepository = memberRepository;
             _membershipRepository = membershipRepository;
-           _planRepository = planRepository;
+            _planRepository = planRepository;
+            _healthRecordRepository = healthRecordRepository;
         }
         public IEnumerable<MemberViewModel> GetAllMembers()
         {
@@ -135,6 +138,22 @@ namespace GymSystemBLL.Services.Classes
                 ViewModel.PlanNmae = plan?.Name;
             }
             return ViewModel;
+        }
+
+    
+
+        public HealthViewModel GetMemberHealthRecordDetails(int MemberId)
+        {
+            var MemeberHealthRecord = _healthRecordRepository.GetById(MemberId);
+            if (MemeberHealthRecord is null) return null;
+            var healthViewModel = new HealthViewModel()
+            {
+                Weight = MemeberHealthRecord.Weight,
+                Height = MemeberHealthRecord.Height,
+                BloodType = MemeberHealthRecord.BloodType,
+                Note = MemeberHealthRecord.Note,
+            };
+            return healthViewModel;
         }
     }
 }
