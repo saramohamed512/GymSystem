@@ -8,16 +8,20 @@ using System.Threading.Tasks;
 
 namespace GymSystemDAL.Data.Context
 {
-    internal class GymSystemDBContext : DbContext
+    public class GymSystemDBContext : DbContext
     {
-    
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public GymSystemDBContext(DbContextOptions<GymSystemDBContext> options) : base(options)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=.;Database=GymSystem;Trusted_Connection=True;TrustServerCertificate=True;");
-            }
+
         }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseSqlServer("Server=.;Database=GymSystem;Trusted_Connection=True;TrustServerCertificate=True;");
+        //    }
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

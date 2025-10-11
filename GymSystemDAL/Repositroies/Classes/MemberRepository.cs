@@ -12,7 +12,14 @@ namespace GymSystemDAL.Repositroies.Classes
     internal class MemberRepository : IMemberRepository
     {
         //Connect to DB
-        private readonly GymSystemDBContext _dbContext = new GymSystemDBContext();
+        //private readonly GymSystemDBContext _dbContext = new GymSystemDBContext();
+
+        //Connect to DB using Dependency Injection (Dynamic Connection)
+        private readonly GymSystemDBContext _dbContext;
+        public MemberRepository(GymSystemDBContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public int Add(Member member)
         {
             _dbContext.Members.Add(member);

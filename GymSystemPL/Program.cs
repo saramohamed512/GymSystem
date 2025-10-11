@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace GymSystemPL
 {
     public class Program
@@ -8,6 +10,18 @@ namespace GymSystemPL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            #region Dependency Injection
+            //make dbcontext class puplic
+            builder.Services.AddDbContext<GymSystemDAL.Data.Context.GymSystemDBContext>(options =>
+            {
+                //options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["DefaultConnection"]);
+                //options.UseSqlServer(builder.Configuration["ConnectionStrings : DefaultConnection"]);
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+            });
+
+            #endregion
 
             var app = builder.Build();
 
