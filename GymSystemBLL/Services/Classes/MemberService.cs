@@ -12,16 +12,21 @@ namespace GymSystemBLL.Services.Classes
 {
     internal class MemberService : IMemberService
     {
+
+        #region Fields
         private readonly IGenericRepository<Member> _memberRepository;
         private readonly IGenericRepository<Membership> _membershipRepository;
         private readonly IPlanRepository _planRepository;
         private readonly IGenericRepository<HealthRecord> _healthRecordRepository;
+        private readonly IGenericRepository<MemberSession> _memberSessionRepository;
 
+        #endregion
         public MemberService
             (IGenericRepository<Member> memberRepository,
             IGenericRepository<Membership> membershipRepository,
             IPlanRepository planRepository,
-            IGenericRepository<HealthRecord> healthRecordRepository
+            IGenericRepository<HealthRecord> healthRecordRepository,
+            IGenericRepository<MemberSession> memberSessionRepository
 
             )
         {
@@ -29,6 +34,7 @@ namespace GymSystemBLL.Services.Classes
             _membershipRepository = membershipRepository;
             _planRepository = planRepository;
             _healthRecordRepository = healthRecordRepository;
+            _memberSessionRepository = memberSessionRepository;
         }
         public IEnumerable<MemberViewModel> GetAllMembers()
         {
@@ -198,6 +204,35 @@ namespace GymSystemBLL.Services.Classes
 
 
         }
+        public bool RemoveMember(int id)
+        {
+            var member = _memberRepository.GetById(id);
+            if (member is null) return false;
+
+            //check if member has active member sessions
+            var HasActiveMemberSessions = _memberSessionRepository.GetAll(m => m.MemberId == id && m.Session.StartDate >DateTime.Now).Any();
+
+            if (HasActiveMemberSessions) return false;
+
+            //Handel to Cascade Delete for Memberships
+            var memberMemberships = _membershipRepository.GetAll(m => m.MemberId == id);
+            try
+            {
+                if(memberMemberships.Any()){
+                    foreach (var membership in memberMemberships)
+                    {
+                        _membershipRepository.Delete(membership.Id);
+                    }
+                }
+                return _memberRepository.Delete(id) > 0;
+
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
         #region Helper Methods
         private bool IsEmailExist(string email)
         {
@@ -207,6 +242,8 @@ namespace GymSystemBLL.Services.Classes
         {
             return _memberRepository.GetAll(m => m.Phone == phone).Any();
         }
+
+       
         #endregion
     }
 }
