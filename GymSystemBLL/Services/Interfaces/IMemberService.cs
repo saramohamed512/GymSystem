@@ -11,5 +11,6 @@ namespace GymSystemBLL.Services.Interfaces
     internal interface IMemberService
     {
         IEnumerable<MemberViewModel> GetAllMembers();
+        bool CreateMembers(CreateMemberViewModel CreateMemberViewModel);
     }
 }
