@@ -13,10 +13,19 @@ namespace GymSystemBLL.Services.Classes
     internal class MemberService : IMemberService
     {
         private readonly IGenericRepository<Member> _memberRepository;
+        private readonly IGenericRepository<Membership> _membershipRepository;
+        private readonly IPlanRepository _planRepository;
 
-        public MemberService(IGenericRepository<Member> memberRepository)
+        public MemberService
+            (IGenericRepository<Member> memberRepository,
+            IGenericRepository<Membership> membershipRepository,
+            IPlanRepository planRepository
+
+            )
         {
             _memberRepository = memberRepository;
+            _membershipRepository = membershipRepository;
+           _planRepository = planRepository;
         }
         public IEnumerable<MemberViewModel> GetAllMembers()
         {
@@ -94,6 +103,38 @@ namespace GymSystemBLL.Services.Classes
 
                 return false;
             }
+        }
+
+        public MemberViewModel? GetMemberDetails(int id)
+        {
+            //IPlanRepository 
+            //Inject PlanRepository & MembershipRepository
+
+            var Member = _memberRepository.GetById(id);
+            if (Member is null) return null;
+            var ViewModel = new MemberViewModel
+            {
+                Name = Member.Name,
+                Email = Member.Email,
+                Phone = Member.Phone,
+                Photo = Member.Photo,
+                Gender = Member.Gender.ToString(),
+                DateOfBirth = Member.DateOfBirth.ToShortDateString(),
+                Address = $"{Member.Address?.BuildingNumber} - {Member.Address?.Street} - {Member.Address?.City}"
+
+            };
+            var ActiveMembership = _membershipRepository.GetAll(m => m.MemberId == id && m.Status == "Active").FirstOrDefault();
+
+            if (ActiveMembership is  not null) //StartDate , EndDate , PlanName
+            {
+                ViewModel.MembershipStartDate = ActiveMembership.CreatedAt.ToShortDateString();
+                ViewModel.MembershipEndDate = ActiveMembership.EndDate.ToShortDateString();
+
+                //plans
+                var plan = _planRepository.GetById(ActiveMembership.PlanId);
+                ViewModel.PlanNmae = plan?.Name;
+            }
+            return ViewModel;
         }
     }
 }

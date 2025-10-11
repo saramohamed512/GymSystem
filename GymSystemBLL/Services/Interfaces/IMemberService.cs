@@ -12,5 +12,7 @@ namespace GymSystemBLL.Services.Interfaces
     {
         IEnumerable<MemberViewModel> GetAllMembers();
         bool CreateMembers(CreateMemberViewModel CreateMemberViewModel);
+
+        MemberViewModel? GetMemberDetails(int id);
     }
 }
