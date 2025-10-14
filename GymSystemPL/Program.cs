@@ -1,3 +1,4 @@
+using GymSystemDAL.Repositroies.Classes;
 using GymSystemDAL.Repositroies.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +28,7 @@ namespace GymSystemPL
             builder.Services.AddScoped(typeof(GymSystemDAL.Repositroies.Interfaces.IGenericRepository<>), typeof(GymSystemDAL.Repositroies.Classes.GenericRepository<>));
             builder.Services.AddScoped
                 <GymSystemDAL.Repositroies.Interfaces.IPlanRepository, GymSystemDAL.Repositroies.Classes.PlanRepository>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
