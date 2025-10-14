@@ -13,6 +13,8 @@ namespace GymSystemBLL.Services.Interfaces
         PlanViewModel? GetPlanById(int id);
         UpdatePlanViewModel? GetPlanToUpdate(int PlanId);
         bool UpdatePlan(int PlanId, UpdatePlanViewModel updatedPlan);
+        
+        bool ToggleStatus(int PlanId);
 
 
     }

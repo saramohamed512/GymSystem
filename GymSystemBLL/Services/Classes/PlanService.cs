@@ -65,6 +65,32 @@ namespace GymSystemBLL.Services.Classes
             };
         }
 
+        public bool ToggleStatus(int PlanId)
+        {
+            
+
+            var plan = _unitOfWork.GetRepository<Plan>().GetById(PlanId);
+            //Check Active Memberships with this Plan
+            if (plan is null || HasActiveMembership(PlanId))  return false;
+          
+            try
+            {
+                if (plan.IsActive)
+                {
+                    //If Active Check Active Memberships
+                    plan.IsActive= false;
+                }
+                plan.IsActive = !plan.IsActive;
+                plan.UpdatedAt = DateTime.Now;
+                _unitOfWork.GetRepository<Plan>().Update(plan);
+                return _unitOfWork.SaveChanges() > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public bool UpdatePlan(int PlanId, UpdatePlanViewModel updatedPlan)
         {
            
