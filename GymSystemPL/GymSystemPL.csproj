@@ -18,4 +18,8 @@
     <ProjectReference Include="..\GymSystemDAL\GymSystemDAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Files\" />
+  </ItemGroup>
+
 </Project>

@@ -1,3 +1,5 @@
+using GymSystemDAL.Data.Context;
+using GymSystemDAL.Data.DataSeed;
 using GymSystemDAL.Repositroies.Classes;
 using GymSystemDAL.Repositroies.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +33,19 @@ namespace GymSystemPL
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             var app = builder.Build();
 
+            #region Data Seed
+            var Scope= app.Services.CreateScope();
+            var dbContext = Scope.ServiceProvider.GetRequiredService<GymSystemDBContext>();
+
+            //Check if There Is Migrations Pending or Not
+
+            var PendingMirations = dbContext.Database.GetAppliedMigrations();
+            if (PendingMirations?.Any()?? false)
+                dbContext.Database.Migrate();
+            GymDbContextSeeding.SeedData(dbContext);
+            #endregion
+
+            //Middilewares
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
