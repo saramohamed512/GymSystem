@@ -1,4 +1,5 @@
-﻿using GymSystemBLL.Services.Interfaces;
+﻿using AutoMapper;
+using GymSystemBLL.Services.Interfaces;
 using GymSystemBLL.ViewModels.SessionsViewModel;
 using GymSystemDAL.Entities;
 using GymSystemDAL.Repositroies.Classes;
@@ -14,10 +15,12 @@ namespace GymSystemBLL.Services.Classes
     public class SessionService : ISessionService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public SessionService(IUnitOfWork unitOfWork) 
+        public SessionService(IUnitOfWork unitOfWork ,IMapper mapper) 
         {
             _unitOfWork= unitOfWork;
+            _mapper = mapper;
         }
         public IEnumerable<SessionViewModel> GetAllSessions()
         {
@@ -39,6 +42,28 @@ namespace GymSystemBLL.Services.Classes
 
 
             }); 
+        }
+
+        public SessionViewModel? GetSessionById(int sessionId)
+        {
+            var session = _unitOfWork.SessionRepoitory.GetSessionWithTrainerAndCategory(sessionId);
+            if (session == null) return null;
+            //return new SessionViewModel
+            //{
+            //    Id = session.Id,
+            //    Description = session.Description,
+            //    StartDate = session.StartDate,
+            //    EndDate = session.EndDate,
+            //    Capacity = session.Capacity,
+            //    TrainerName = session.SessionTrainer.Name, //Related Entity
+            //    CategoryName = session.SessionCategory.CategoryName, //Related Entity
+            //    AvailableSlot = session.Capacity - _unitOfWork.SessionRepoitory.GetCountOfBookedSlots(session.Id)
+            //};
+
+            //Auto Mapper
+            var MappedSession = _mapper.Map<Session, SessionViewModel>(session);
+            MappedSession.AvailableSlot = MappedSession.Capacity - _unitOfWork.SessionRepoitory.GetCountOfBookedSlots(session.Id);
+            return MappedSession;
         }
     }
 }

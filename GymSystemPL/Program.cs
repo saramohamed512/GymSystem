@@ -1,3 +1,4 @@
+using GymSystemBLL;
 using GymSystemDAL.Data.Context;
 using GymSystemDAL.Data.DataSeed;
 using GymSystemDAL.Repositroies.Classes;
@@ -33,6 +34,7 @@ namespace GymSystemPL
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<GymSystemDAL.Repositroies.Interfaces.ISessionRepoitory, GymSystemDAL.Repositroies.Classes.SessionRepoitory>();
+            builder.Services.AddAutoMapper(X=>X.AddProfile(new MappingProfiles()));
             var app = builder.Build();
 
             #region Data Seed

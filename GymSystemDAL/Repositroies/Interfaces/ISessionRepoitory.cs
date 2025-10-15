@@ -12,5 +12,6 @@ namespace GymSystemDAL.Repositroies.Interfaces
         IEnumerable<Session> GetAllSessionWithTrainerAndCategory();
 
         int GetCountOfBookedSlots(int sessionId);
+        Session? GetSessionWithTrainerAndCategory(int session);
     }
 }
