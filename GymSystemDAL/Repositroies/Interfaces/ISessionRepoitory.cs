@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GymSystemDAL.Repositroies.Interfaces
 {
-    public interface ISessionRepoitory
+    public interface ISessionRepoitory: IGenericRepository<Session>
     {
         IEnumerable<Session> GetAllSessionWithTrainerAndCategory();
 

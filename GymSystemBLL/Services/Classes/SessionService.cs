@@ -88,6 +88,34 @@ namespace GymSystemBLL.Services.Classes
             MappedSession.AvailableSlot = MappedSession.Capacity - _unitOfWork.SessionRepoitory.GetCountOfBookedSlots(session.Id);
             return MappedSession;
         }
+        public UpdateSessionViewModel? GetSessionToUpdate(int sessionId)
+        {
+            var session = _unitOfWork.SessionRepoitory.GetById(sessionId);
+            if (!IsSessionAvilableForUpdate(session!)) return null;
+            return _mapper.Map<UpdateSessionViewModel>(session);
+        }
+
+        public bool UpdateSession(UpdateSessionViewModel updatedSession, int sessionId)
+        {
+            try
+            {
+                var session = _unitOfWork.SessionRepoitory.GetById(sessionId);
+                if (!IsSessionAvilableForUpdate(session!)) return false;
+                //check if trainer exists
+                //check if category exists
+                //check if start date < end date
+                if (!IsTrainerExists(updatedSession.TrainerId) || !IsDateTimeValid(updatedSession.StartDate, updatedSession.EndDate))
+                    return false;
+                _mapper.Map(updatedSession, session);
+                session!.UpdatedAt = DateTime.Now;
+                _unitOfWork.SessionRepoitory.Update(session);
+                return _unitOfWork.SaveChanges() > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         #region Helper Methods
         private bool IsTrainerExists(int trainerId)
         {
@@ -102,6 +130,21 @@ namespace GymSystemBLL.Services.Classes
         {
             return startDate < endDate;
         }
+
+        private bool IsSessionAvilableForUpdate(Session session)
+        {
+            if(session is null) return false;
+            //if session completed => cannot update
+            if(session.EndDate < DateTime.Now) return false;
+            //if session has started => cannot update
+            if(session.StartDate < DateTime.Now) return false;
+            //if session has members booked => cannot update
+            var ActiveBookings = _unitOfWork.SessionRepoitory.GetCountOfBookedSlots(session.Id)>0;
+            if(ActiveBookings) return false;
+            return true;
+        }
+
+
         #endregion
     }
 }

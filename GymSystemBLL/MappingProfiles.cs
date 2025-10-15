@@ -22,6 +22,7 @@ namespace GymSystemBLL
                 .ForMember(dest => dest.AvailableSlot, Options => Options.Ignore());
 
             CreateMap<CreateSessionViewModel, Session>();
+            CreateMap< UpdateSessionViewModel,Session>().ReverseMap();
 
         }
     }

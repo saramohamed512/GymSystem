@@ -12,6 +12,9 @@ namespace GymSystemBLL.Services.Interfaces
     {
         IEnumerable<SessionViewModel> GetAllSessions();
         SessionViewModel? GetSessionById(int sessionId);
+
         bool CreateSession(CreateSessionViewModel createdSession);
+        UpdateSessionViewModel? GetSessionToUpdate(int sessionId);
+        bool UpdateSession(UpdateSessionViewModel updatedSession, int sessionId);
     }
 }
