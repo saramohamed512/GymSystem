@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GymSystemBLL.Services.Interfaces;
 using GymSystemBLL.ViewModels.SessionsViewModel;
+using GymSystemBLL.ViewModels.SessionViewModels;
 using GymSystemDAL.Entities;
 using GymSystemDAL.Repositroies.Classes;
 using GymSystemDAL.Repositroies.Interfaces;
@@ -22,6 +23,28 @@ namespace GymSystemBLL.Services.Classes
             _unitOfWork= unitOfWork;
             _mapper = mapper;
         }
+
+        public bool CreateSession(CreateSessionViewModel createdSession)
+        {
+            try
+            {
+                //check if trainer exists
+                //check if category exists
+                //check if start date < end date
+                if (!IsTrainerExists(createdSession.TrainerId) || !IsCategoryExists(createdSession.CategoryId) || !IsDateTimeValid(createdSession.StartDate, createdSession.EndDate))
+                    return false;
+                if(createdSession.Capacity>25 || createdSession.Capacity<0) return false;
+
+                var SessionEnttity=_mapper.Map< Session>(createdSession);
+                _unitOfWork.GetRepository<Session>().Add(SessionEnttity);
+                return _unitOfWork.SaveChanges() > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public IEnumerable<SessionViewModel> GetAllSessions()
         {
             //var Sessions = _unitOfWork.GetRepository<Session>().GetAll();
@@ -65,5 +88,20 @@ namespace GymSystemBLL.Services.Classes
             MappedSession.AvailableSlot = MappedSession.Capacity - _unitOfWork.SessionRepoitory.GetCountOfBookedSlots(session.Id);
             return MappedSession;
         }
+        #region Helper Methods
+        private bool IsTrainerExists(int trainerId)
+        {
+            return _unitOfWork.GetRepository<Trainer>().GetById(trainerId) is not null;
+           
+        }
+        private bool IsCategoryExists(int categoryId)
+        {
+            return _unitOfWork.GetRepository<Category>().GetById(categoryId) is not null;
+        }
+        private bool IsDateTimeValid(DateTime startDate, DateTime endDate)
+        {
+            return startDate < endDate;
+        }
+        #endregion
     }
 }
