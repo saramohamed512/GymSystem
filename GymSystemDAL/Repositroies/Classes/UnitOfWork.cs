@@ -12,13 +12,18 @@ namespace GymSystemDAL.Repositroies.Classes
     public class UnitOfWork : IUnitOfWork
     {
         private readonly Dictionary<Type, object> _repositories = new Dictionary<Type, object>();   
+        private ISessionRepoitory _sessionRepoitory;
         private GymSystemDBContext _dbContext;
 
-        public UnitOfWork(GymSystemDBContext dbContext)
+        public UnitOfWork(GymSystemDBContext dbContext , ISessionRepoitory sessionRepoitory)
         {
            _dbContext = dbContext;
+           _sessionRepoitory = sessionRepoitory;
 
         }
+
+        public ISessionRepoitory SessionRepoitory { get; }
+
         public IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity, new()
         {
             var EntityType = typeof(TEntity);

@@ -30,7 +30,9 @@ namespace GymSystemPL
             builder.Services.AddScoped(typeof(GymSystemDAL.Repositroies.Interfaces.IGenericRepository<>), typeof(GymSystemDAL.Repositroies.Classes.GenericRepository<>));
             builder.Services.AddScoped
                 <GymSystemDAL.Repositroies.Interfaces.IPlanRepository, GymSystemDAL.Repositroies.Classes.PlanRepository>();
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<GymSystemDAL.Repositroies.Interfaces.ISessionRepoitory, GymSystemDAL.Repositroies.Classes.SessionRepoitory>();
             var app = builder.Build();
 
             #region Data Seed
