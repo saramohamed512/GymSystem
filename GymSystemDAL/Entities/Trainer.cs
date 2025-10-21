@@ -15,7 +15,7 @@ namespace GymSystemDAL.Entities
 
         #region 1:M RS Between SessionTrainer
 
-        public ICollection<Session> TrainerSessions{ get; set; }//One
+        public ICollection<Session> TrainerSessions{ get; set; } = new List<Session>();//One
         #endregion
     }
 }

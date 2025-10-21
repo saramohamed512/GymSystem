@@ -15,16 +15,16 @@ namespace GymSystemDAL.Entities
 
         #region 1:M RS Between SessionCategory
         public int CategoryId { get; set; }
-        public Category SessionCategory { get; set; }//One
+        public Category SessionCategory { get; set; } = null!;//One
         #endregion
 
         #region 1:M RS Between SessionTrainer
         //FK
         public int TrainerId { get; set; }
-        public Trainer SessionTrainer { get; set; }//One
+        public Trainer SessionTrainer { get; set; } = null!;//One
         #endregion
         #region M:M Between MemberSession
-        public ICollection<MemberSession> SessionMembers { get; set; }
+        public ICollection<MemberSession> SessionMembers { get; set; } = new List<MemberSession>();
         #endregion
     }
 }

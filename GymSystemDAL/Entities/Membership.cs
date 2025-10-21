@@ -10,8 +10,8 @@ namespace GymSystemDAL.Entities
     {
         public int MemberId { get; set; }// FK from Member
         public int PlanId { get; set; }// FK from Plan
-        public Member Member { get; set; }
-        public Plan Plan { get; set; }
+        public Member Member { get; set; } = null!;
+        public Plan Plan { get; set; } = null!;
         //StartDate Column Exists in BaseEntity
         public DateTime EndDate { get; set; }
         public string Status

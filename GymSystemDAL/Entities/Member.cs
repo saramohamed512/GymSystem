@@ -15,13 +15,13 @@ namespace GymSystemDAL.Entities
 
         #region 1:1 RS Between Member HealthRecord
         //Navigation Property
-        public HealthRecord HealthRecord { get; set; }
+        public HealthRecord HealthRecord { get; set; } = null!;
         #endregion
         #region M:M Between MemberPlan
-        public ICollection<Membership> Memberships { get; set; }
+        public ICollection<Membership> Memberships { get; set; } = new List<Membership>();
         #endregion
         #region M:M Between MemberSession
-        public ICollection<MemberSession> MemberSessions { get; set; }
+        public ICollection<MemberSession> MemberSessions { get; set; } = new List<MemberSession>();
         #endregion
     }
 }

@@ -22,7 +22,7 @@ namespace GymSystemDAL.Repositroies.Classes
 
         }
 
-        public ISessionRepoitory SessionRepoitory { get; }
+        public ISessionRepoitory SessionRepoitory => _sessionRepoitory;
 
         public IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity, new()
         {

@@ -10,8 +10,8 @@ namespace GymSystemDAL.Entities
     {
         public int MemberId { get; set; }// FK from Member
         public int SessionId { get; set; }// FK from Session
-        public Member Member { get; set; }
-        public Session Session { get; set; }
+        public Member Member { get; set; } = null!;
+        public Session Session { get; set; } = null!;
         //BookingDate Column Exists in BaseEntity
         public bool IsAttend { get; set; }
        

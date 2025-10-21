@@ -10,7 +10,7 @@ namespace GymSystemDAL.Entities
     {
         public decimal Height { get; set; }
         public decimal Weight { get; set; }
-        public string BloodType { get; set; }
+        public string BloodType { get; set; } = null!;
         public string? Note { get; set; }
 
         //LastUpdated Column Exists in BaseEntity
