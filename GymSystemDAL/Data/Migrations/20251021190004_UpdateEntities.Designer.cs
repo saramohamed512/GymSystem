@@ -4,6 +4,7 @@ using GymSystemDAL.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymSystemDAL.Data.Migrations
 {
     [DbContext(typeof(GymSystemDBContext))]
-    partial class GymSystemDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251021190004_UpdateEntities")]
+    partial class UpdateEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,19 +59,17 @@ namespace GymSystemDAL.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Height")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Weight")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("HealthRecords", (string)null);
+                    b.ToTable("Members", (string)null);
                 });
 
             modelBuilder.Entity("GymSystemDAL.Entities.Member", b =>

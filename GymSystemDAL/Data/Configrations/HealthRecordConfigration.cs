@@ -14,8 +14,14 @@ namespace GymSystemDAL.Data.Configrations
 
         public void Configure(EntityTypeBuilder<HealthRecord> builder)
         {
+            // Configure decimal precision for Height and Weight
+            builder.Property(x => x.Height)
+                .HasPrecision(5, 2); // 5 total digits, 2 decimal places (e.g., 199.99)
+            
+            builder.Property(x => x.Weight)
+                .HasPrecision(5, 2); // 5 total digits, 2 decimal places (e.g., 199.99)
 
-            builder.ToTable("Members");
+            builder.ToTable("HealthRecords");
             builder.HasOne<Member>()
                 .WithOne(X => X.HealthRecord)
                 .HasForeignKey<HealthRecord>(X => X.Id);
