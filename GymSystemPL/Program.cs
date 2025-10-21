@@ -42,9 +42,8 @@ namespace GymSystemPL
             var dbContext = Scope.ServiceProvider.GetRequiredService<GymSystemDBContext>();
 
             //Check if There Is Migrations Pending or Not
-
-            var PendingMirations = dbContext.Database.GetAppliedMigrations();
-            if (PendingMirations?.Any()?? false)
+            var PendingMigrations = dbContext.Database.GetPendingMigrations();
+            if (PendingMigrations?.Any() ?? false)
                 dbContext.Database.Migrate();
             GymDbContextSeeding.SeedData(dbContext);
             #endregion
@@ -59,6 +58,7 @@ namespace GymSystemPL
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthorization();
