@@ -114,7 +114,10 @@ namespace GymSystemBLL.Services.Classes
             var Repo = _unitOfWork.GetRepository<Trainer>();
             var TrainerToUpdate = Repo.GetById(trainerId);
 
-            if (TrainerToUpdate is null || IsEmailExist(updatedTrainer.Email) || IsPhoneExist(updatedTrainer.Phone)) return false;
+            //if (TrainerToUpdate is null || IsEmailExist(updatedTrainer.Email) || IsPhoneExist(updatedTrainer.Phone)) return false;
+            var emailExists = _unitOfWork.GetRepository<Trainer>().GetAll(m => m.Email == updatedTrainer.Email && m.Id != trainerId);
+            var phoneExists = _unitOfWork.GetRepository<Trainer>().GetAll(m => m.Phone == updatedTrainer.Phone && m.Id != trainerId);
+            if (emailExists.Any() || phoneExists.Any()) return false;
 
             TrainerToUpdate.Email = updatedTrainer.Email;
             TrainerToUpdate.Phone = updatedTrainer.Phone;
