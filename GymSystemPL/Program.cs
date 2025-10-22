@@ -38,6 +38,7 @@ namespace GymSystemPL
             builder.Services.AddScoped<GymSystemDAL.Repositroies.Interfaces.ISessionRepoitory, GymSystemDAL.Repositroies.Classes.SessionRepoitory>();
             builder.Services.AddAutoMapper(X=>X.AddProfile(new MappingProfiles()));
             builder.Services.AddScoped<IMemberService , MemberService>();
+            builder.Services.AddScoped<ITrainerService, TrainerService>();
             var app = builder.Build();
 
             #region Data Seed

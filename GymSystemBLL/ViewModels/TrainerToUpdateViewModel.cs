@@ -10,7 +10,7 @@ namespace GymSystemBLL.ViewModels
 {
     public class TrainerToUpdateViewModel
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
        
 
         [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Email is required")]

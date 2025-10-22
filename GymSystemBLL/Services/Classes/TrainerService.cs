@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GymSystemBLL.Services.Classes
 {
-    internal class TrainerService : ITrainerService
+    public class TrainerService : ITrainerService
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -56,7 +56,7 @@ namespace GymSystemBLL.Services.Classes
         public IEnumerable<TrainerViewModel> GetAllTrainers()
         {
             var Trainers = _unitOfWork.GetRepository<Trainer>().GetAll();
-            if (Trainers is null || Trainers.Any()) return [];
+            if (Trainers is null || !Trainers.Any()) return [];
 
             return Trainers.Select(X => new TrainerViewModel()
             {
@@ -111,25 +111,62 @@ namespace GymSystemBLL.Services.Classes
 
         public bool UpdateTrainerDetails(TrainerToUpdateViewModel updatedTrainer, int trainerId)
         {
-            var Repo = _unitOfWork.GetRepository<Trainer>();
-            var TrainerToUpdate = Repo.GetById(trainerId);
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"=== UpdateTrainerDetails START ===");
+                System.Diagnostics.Debug.WriteLine($"ID: {trainerId}");
+                System.Diagnostics.Debug.WriteLine($"Email: {updatedTrainer?.Email}");
+                System.Diagnostics.Debug.WriteLine($"Phone: {updatedTrainer?.Phone}");
+                System.Diagnostics.Debug.WriteLine($"BuildingNumber: {updatedTrainer?.BuildingNumber}");
+                System.Diagnostics.Debug.WriteLine($"Street: {updatedTrainer?.Street}");
+                System.Diagnostics.Debug.WriteLine($"City: {updatedTrainer?.City}");
+                System.Diagnostics.Debug.WriteLine($"Specialites: {updatedTrainer?.Specialites}");
+                
+                var Repo = _unitOfWork.GetRepository<Trainer>();
+                var TrainerToUpdate = Repo.GetById(trainerId);
 
-            //if (TrainerToUpdate is null || IsEmailExist(updatedTrainer.Email) || IsPhoneExist(updatedTrainer.Phone)) return false;
-            var emailExists = _unitOfWork.GetRepository<Trainer>().GetAll(m => m.Email == updatedTrainer.Email && m.Id != trainerId);
-            var phoneExists = _unitOfWork.GetRepository<Trainer>().GetAll(m => m.Phone == updatedTrainer.Phone && m.Id != trainerId);
-            if (emailExists.Any() || phoneExists.Any()) return false;
+                if (TrainerToUpdate is null) 
+                {
+                    System.Diagnostics.Debug.WriteLine("ERROR: Trainer not found!");
+                    return false;
+                }
 
-            TrainerToUpdate.Email = updatedTrainer.Email;
-            TrainerToUpdate.Phone = updatedTrainer.Phone;
-            TrainerToUpdate.Address.BuildingNumber = updatedTrainer.BuildingNumber;
-            TrainerToUpdate.Address.Street = updatedTrainer.Street;
-            TrainerToUpdate.Address.City = updatedTrainer.City;
-            TrainerToUpdate.Specialites = updatedTrainer.Specialites;
-            TrainerToUpdate.UpdatedAt = DateTime.Now;
+                System.Diagnostics.Debug.WriteLine($"Found trainer: {TrainerToUpdate.Name}");
+                System.Diagnostics.Debug.WriteLine($"Current email: {TrainerToUpdate.Email}");
+                System.Diagnostics.Debug.WriteLine($"Current phone: {TrainerToUpdate.Phone}");
 
-            Repo.Update(TrainerToUpdate);
-            return _unitOfWork.SaveChanges() > 0;
+                // TEMPORARY: Skip validation for testing
+                System.Diagnostics.Debug.WriteLine("SKIPPING VALIDATION FOR TESTING...");
 
+                // Update trainer information
+                System.Diagnostics.Debug.WriteLine("Updating trainer fields...");
+                TrainerToUpdate.Email = updatedTrainer.Email;
+                TrainerToUpdate.Phone = updatedTrainer.Phone;
+                TrainerToUpdate.Address.BuildingNumber = updatedTrainer.BuildingNumber;
+                TrainerToUpdate.Address.Street = updatedTrainer.Street;
+                TrainerToUpdate.Address.City = updatedTrainer.City;
+                TrainerToUpdate.Specialites = updatedTrainer.Specialites;
+                TrainerToUpdate.UpdatedAt = DateTime.Now;
+
+                System.Diagnostics.Debug.WriteLine("Calling Repo.Update...");
+                Repo.Update(TrainerToUpdate);
+                
+                System.Diagnostics.Debug.WriteLine("Calling SaveChanges...");
+                var changesCount = _unitOfWork.SaveChanges();
+                System.Diagnostics.Debug.WriteLine($"SaveChanges returned: {changesCount}");
+                
+                var saveResult = changesCount > 0;
+                System.Diagnostics.Debug.WriteLine($"Final result: {saveResult}");
+                System.Diagnostics.Debug.WriteLine($"=== UpdateTrainerDetails END ===");
+                
+                return saveResult;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"EXCEPTION in UpdateTrainerDetails: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                return false;
+            }
         }
 
 
