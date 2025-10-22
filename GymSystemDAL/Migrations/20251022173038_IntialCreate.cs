@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace GymSystemDAL.Data.Migrations
+namespace GymSystemDAL.Migrations
 {
     /// <inheritdoc />
     public partial class IntialCreate : Migration
@@ -33,8 +33,8 @@ namespace GymSystemDAL.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Photo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Height = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Height = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
+                    Weight = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
                     BloodType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JoinDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
@@ -44,14 +44,14 @@ namespace GymSystemDAL.Data.Migrations
                     Phone = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false),
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
-                    Address_BuildingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_BuildingNumber = table.Column<int>(type: "int", nullable: false),
                     Street = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     City = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Members", x => x.Id);
-                    table.CheckConstraint("GymUserValidEmailCheck", "Email Like '_%@_%._&'");
+                    table.CheckConstraint("GymUserValidEmailCheck", "Email Like '_%@_%._%'");
                     table.CheckConstraint("GymUserValidPhoneCheck", "Phone Like '01%' and Phone Not Like '%[^0-9]%'");
                 });
 
@@ -89,14 +89,14 @@ namespace GymSystemDAL.Data.Migrations
                     Phone = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false),
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
-                    Address_BuildingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_BuildingNumber = table.Column<int>(type: "int", nullable: false),
                     Street = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     City = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Trainers", x => x.Id);
-                    table.CheckConstraint("GymUserValidEmailCheck1", "Email Like '_%@_%._&'");
+                    table.CheckConstraint("GymUserValidEmailCheck1", "Email Like '_%@_%._%'");
                     table.CheckConstraint("GymUserValidPhoneCheck1", "Phone Like '01%' and Phone Not Like '%[^0-9]%'");
                 });
 

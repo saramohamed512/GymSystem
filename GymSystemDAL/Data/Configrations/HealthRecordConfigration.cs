@@ -21,10 +21,10 @@ namespace GymSystemDAL.Data.Configrations
             builder.Property(x => x.Weight)
                 .HasPrecision(5, 2); // 5 total digits, 2 decimal places (e.g., 199.99)
 
-            builder.ToTable("HealthRecords");
-            builder.HasOne<Member>()
-                .WithOne(X => X.HealthRecord)
-                .HasForeignKey<HealthRecord>(X => X.Id);
+            builder.ToTable("Members");
+            builder.HasOne<Member>().
+                WithOne(M => M.HealthRecord).
+                HasForeignKey<HealthRecord>(HR => HR.Id);
 
             builder.Ignore(X => X.CreatedAt);
             builder.Ignore(X => X.UpdatedAt);

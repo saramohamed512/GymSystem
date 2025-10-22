@@ -32,6 +32,21 @@ namespace GymSystemPL.Controllers
             return View(memberDetails);
         }
         #endregion
+        #region Get Member Health record
+        public ActionResult HealthRecordDetails(int id)
+        {
+            if (id <= 0)
+                return RedirectToAction(nameof(Index));
+            var memberHealthRecord = _memberService.GetMemberHealthRecordDetails(id);
+            Console.WriteLine("Member Health Record Not Found");
+            Console.WriteLine(memberHealthRecord);
+            if (memberHealthRecord == null)
+                
+            return RedirectToAction(nameof(Index));
 
+
+            return View(memberHealthRecord);
+        }
+        #endregion
     }
 }

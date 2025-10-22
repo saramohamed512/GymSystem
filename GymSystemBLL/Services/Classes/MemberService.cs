@@ -132,6 +132,8 @@ namespace GymSystemBLL.Services.Classes
         public HealthViewModel GetMemberHealthRecordDetails(int MemberId)
         {
             var MemeberHealthRecord = _unitOfWork.GetRepository<HealthRecord>().GetById(MemberId);
+            Console.WriteLine("Inside Service Layer - GetMemberHealthRecordDetails");
+            Console.WriteLine(MemeberHealthRecord);
             if (MemeberHealthRecord is null) return null;
             var healthViewModel = new HealthViewModel()
             {
@@ -140,6 +142,8 @@ namespace GymSystemBLL.Services.Classes
                 BloodType = MemeberHealthRecord.BloodType,
                 Note = MemeberHealthRecord.Note,
             };
+            Console.WriteLine("Mapped Health View Model:");
+            Console.WriteLine(healthViewModel);
             return healthViewModel;
         }
 
