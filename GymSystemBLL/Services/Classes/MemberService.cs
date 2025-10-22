@@ -206,9 +206,14 @@ namespace GymSystemBLL.Services.Classes
             if (member is null) return false;
 
             //check if member has active member sessions
-            var HasActiveMemberSessions = MemberSessionRepo.GetAll(m => m.MemberId == id && m.Session.StartDate >DateTime.Now).Any();
+            //var HasActiveMemberSessions = MemberSessionRepo.GetAll(m => m.MemberId == id && m.Session.StartDate >DateTime.Now).Any();
+            //Get All Sessions IDs
+            var SessionIDs=_unitOfWork.GetRepository<MemberSession>()
+                .GetAll(s => s.MemberId== id).Select(s => s.SessionId);
+            var HasActiveSession=_unitOfWork.GetRepository<Session>()
+                .GetAll(s => SessionIDs.Contains(s.Id) && s.StartDate > DateTime.Now).Any();
 
-            if (HasActiveMemberSessions) return false;
+            if (HasActiveSession) return false;
 
             //Handel to Cascade Delete for Memberships
             var memberMemberships = MembershipRepo.GetAll(m => m.MemberId == id);
