@@ -9,9 +9,9 @@ namespace GymSystemPL.Controllers
     public class SessionController : Controller
     {
         private readonly ISessionService _sessionService;
-        public SessionController(ISessionService sessionService) 
+        public SessionController(ISessionService sessionService)
         {
-            _sessionService=sessionService;
+            _sessionService = sessionService;
         }
 
         #region Get All Sessions
@@ -24,7 +24,7 @@ namespace GymSystemPL.Controllers
         #region Get Session Details
         public ActionResult Details(int id)
         {
-            if(id <= 0)
+            if (id <= 0)
             {
                 TempData["ErrorMessage"] = "Invalid Session Id.";
                 return RedirectToAction("Index");
@@ -32,7 +32,7 @@ namespace GymSystemPL.Controllers
             var session = _sessionService.GetSessionById(id);
             if (session == null)
             {
-               TempData["ErrorMessage"] = "Session not found.";
+                TempData["ErrorMessage"] = "Session not found.";
                 return RedirectToAction("Index");
             }
             return View(session);
@@ -41,39 +41,84 @@ namespace GymSystemPL.Controllers
         #region Create Session
         public ActionResult Create()
         {
-            LoadDropdowns();
+            LoadDropdownsForTrainers();
+            LoadDropdownsForCategories();
             return View();
         }
         [HttpPost]
-        public ActionResult Create(CreateSessionViewModel CreatedSession) 
+        public ActionResult Create(CreateSessionViewModel CreatedSession)
         {
             if (!ModelState.IsValid)
             {
-                LoadDropdowns();
+                LoadDropdownsForTrainers();
                 return View(CreatedSession);
             }
             var Result = _sessionService.CreateSession(CreatedSession);
-            if(!Result)
+            if (!Result)
             {
                 TempData["ErrorMessage"] = "Failed to create session.";
-                LoadDropdowns();
+                LoadDropdownsForTrainers();
                 return View(CreatedSession);
             }
             else
             {
                 TempData["SuccessMessage"] = "Session created successfully.";
-                LoadDropdowns();
+                LoadDropdownsForTrainers();
                 return RedirectToAction("Index");
-               
-                
+
+
             }
         }
         #endregion
-        private void LoadDropdowns()
+        #region Edit Session
+        public ActionResult Edit(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErrorMessage"] = "Invalid Session Id.";
+                return RedirectToAction("Index");
+            }
+            var Session = _sessionService.GetSessionToUpdate(id);
+            if (Session == null)
+            {
+                TempData["ErrorMessage"] = "Session not found.";
+                return RedirectToAction("Index");
+            }
+            LoadDropdownsForTrainers();
+            return View(Session);
+        }
+        [HttpPost]
+        public ActionResult Edit([FromRoute] int id,UpdateSessionViewModel UpdatedSession)
+        {
+            if (!ModelState.IsValid)
+            {
+                LoadDropdownsForTrainers();
+                return View(UpdatedSession);
+            }
+            var Result = _sessionService.UpdateSession(UpdatedSession, id);
+
+            if (!Result)
+            {
+                TempData["ErrorMessage"] = "Failed to update session.";
+                LoadDropdownsForTrainers();
+                return View(UpdatedSession);
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Session updated successfully.";
+                return RedirectToAction("Index");
+            }
+        }
+        #endregion
+        private void LoadDropdownsForTrainers()
         {
             var Trainers = _sessionService.GetTrainerForSessions();
-            var Categories = _sessionService.GetCategoryForSessions();
             ViewBag.Trainers = new SelectList(Trainers, "Id", "Name");
+        }
+        private void LoadDropdownsForCategories()
+        {
+
+            var Categories = _sessionService.GetCategoryForSessions();
             ViewBag.Categories = new SelectList(Categories, "Id", "Name");
         }
     }
