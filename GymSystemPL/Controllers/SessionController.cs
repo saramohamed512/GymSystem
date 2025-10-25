@@ -1,6 +1,8 @@
 ﻿using GymSystemBLL.Services.Classes;
 using GymSystemBLL.Services.Interfaces;
+using GymSystemBLL.ViewModels.SessionViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GymSystemPL.Controllers
 {
@@ -36,6 +38,43 @@ namespace GymSystemPL.Controllers
             return View(session);
         }
         #endregion
-
+        #region Create Session
+        public ActionResult Create()
+        {
+            LoadDropdowns();
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Create(CreateSessionViewModel CreatedSession) 
+        {
+            if (!ModelState.IsValid)
+            {
+                LoadDropdowns();
+                return View(CreatedSession);
+            }
+            var Result = _sessionService.CreateSession(CreatedSession);
+            if(!Result)
+            {
+                TempData["ErrorMessage"] = "Failed to create session.";
+                LoadDropdowns();
+                return View(CreatedSession);
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Session created successfully.";
+                LoadDropdowns();
+                return RedirectToAction("Index");
+               
+                
+            }
+        }
+        #endregion
+        private void LoadDropdowns()
+        {
+            var Trainers = _sessionService.GetTrainerForSessions();
+            var Categories = _sessionService.GetCategoryForSessions();
+            ViewBag.Trainers = new SelectList(Trainers, "Id", "Name");
+            ViewBag.Categories = new SelectList(Categories, "Id", "Name");
+        }
     }
 }
