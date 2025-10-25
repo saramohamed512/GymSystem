@@ -1,4 +1,5 @@
-﻿using GymSystemBLL.Services.Classes;
+﻿
+using GymSystemBLL.Services.Classes;
 using GymSystemBLL.Services.Interfaces;
 using GymSystemBLL.ViewModels.PlanViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -72,6 +73,22 @@ namespace GymSystemPL.Controllers
             TempData["SuccessMessage"] = "Plan Updated Successfully !";
             return RedirectToAction("Index");
 
+        }
+        #endregion
+        #region Soft Delte - Action & Deactive
+        [HttpPost]
+        public ActionResult Activate(int id)
+        {
+             var Result = _planService.ToggleStatus(id);
+            if(Result)
+            {
+                TempData["SuccessMessage"] = "Plan Status Changed Successfully !";
+                return RedirectToAction("Index");
+            }
+            else { 
+                TempData["ErrorMessage"] = "Failed to Change Plan Status !";
+                return RedirectToAction("Index");
+            }
         }
         #endregion
 
