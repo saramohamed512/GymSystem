@@ -175,8 +175,8 @@ namespace GymSystemBLL.Services.Classes
         private bool IsSessionAvilableForDelete(Session session)
         {
             if (session is null) return false;
-            //if session completed => cannot update
-            if (session.EndDate < DateTime.Now) return false;
+            ////if session completed => cannot update
+            //if (session.EndDate < DateTime.Now) return false;
             //if session upcoming => can delete
             if (session.StartDate > DateTime.Now) return false;
             //is session ongoing => can delete
