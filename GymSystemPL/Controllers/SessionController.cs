@@ -19,6 +19,23 @@ namespace GymSystemPL.Controllers
             return View(Sessions);
         }
         #endregion
+        #region Get Session Details
+        public ActionResult Details(int id)
+        {
+            if(id <= 0)
+            {
+                TempData["ErrorMessage"] = "Invalid Session Id.";
+                return RedirectToAction("Index");
+            }
+            var session = _sessionService.GetSessionById(id);
+            if (session == null)
+            {
+               TempData["ErrorMessage"] = "Session not found.";
+                return RedirectToAction("Index");
+            }
+            return View(session);
+        }
+        #endregion
 
     }
 }
