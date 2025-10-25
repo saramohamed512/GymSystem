@@ -19,6 +19,24 @@ namespace GymSystemPL.Controllers
             return View(Plans);
         }
         #endregion
+        #region Get Plan Details
+        public ActionResult Details(int id)
+        {
+           if(id <= 0)
+           {
+                TempData["ErrorMessage"] = "Id Cannot Be 0 or Negative Number !";
+                return RedirectToAction("Index");
+           }
+           var Plan = _planService.GetPlanById(id);
+           if(Plan == null)
+           {
+                 TempData["ErrorMessage"] = "Plan Not Found !";
+                 return RedirectToAction("Index");
+           }
+           return View(Plan);
+
+        }
+        #endregion
 
     }
 }
