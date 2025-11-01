@@ -1,9 +1,11 @@
 ﻿using GymSystemBLL.Services.Interfaces;
 using GymSystemBLL.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymSystemPL.Controllers
 {
+    [Authorize(Roles ="SuperAdmin")]
     public class MemberController : Controller
     {
         //ASK CLR to Inject object from meber service layer
