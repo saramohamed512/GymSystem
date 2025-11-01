@@ -11,7 +11,7 @@ namespace GymSystemDAL.Entities
         //CreatedAt Column Exists in BaseEntity
         //I will use it to store the Membership Start Date
 
-        public string? Photo { get; set; }
+        public string Photo { get; set; }=null!; //URL of the Photo
 
         #region 1:1 RS Between Member HealthRecord
         //Navigation Property
