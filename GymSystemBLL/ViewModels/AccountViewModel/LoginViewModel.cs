@@ -19,3 +19,4 @@ namespace GymSystemBLL.ViewModels.AccountViewModel
 
         public bool RememberMe { get; set; }
     }
+}
