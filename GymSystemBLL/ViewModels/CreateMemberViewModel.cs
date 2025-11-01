@@ -5,11 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 namespace GymSystemBLL.ViewModels
 {
     public class CreateMemberViewModel
     {
-
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Photo is Required !")]
+        [Display(Name = "Member Photo")]
+        public  IFormFile  PhotoFile { get; set; }
         [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Name is required")]
         [StringLength(50,MinimumLength =2, ErrorMessage = "Name Must Be Between 2 and 50 Chars !")]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Name can only contain letters and spaces.")]
